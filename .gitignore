@@ -1,5 +1,7 @@
 os62374/python_scripts/snowflake_creds.py
 
+.DS_Store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
