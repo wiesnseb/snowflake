@@ -3,7 +3,6 @@ import pandas as pd
 def transform_renewable_electricity(df):
     new_df = pd.DataFrame()
 
-    new_df['ID'] = df['ID']
     new_df['YEAR'] = df['Periods'].str[:4]
     new_df['ENERGY_SOURCES_TECHNIQUES'] = df['EnergySourcesTechniques'].str.strip().map({
         'T001028': 'Total renewable energy sources',
@@ -36,8 +35,9 @@ def transform_renewable_electricity(df):
 
 def transform_milk_supply_and_dairy_production(df):
     new_df = pd.DataFrame()
-    new_df['ID'] = df['ID']
+    
     new_df['YEAR'] = df['Periods'].str[:4]
+    new_df['MONTH'] = df['Periods'].str[6:8]
     new_df['IS_YEARLY_SUMMARY'] = df['Periods'].str[4:6].map({
         'JJ': True,
         'MM': False,
@@ -48,7 +48,7 @@ def transform_milk_supply_and_dairy_production(df):
     new_df['PROTEIN_CONTENT'] = pd.to_numeric(df['ProteinContent_3'], errors='coerce')
     new_df['TOTAL_MILK_POWDER'] = pd.to_numeric(df['TotalMilkPowder_6'], errors='coerce')
     new_df['WHOLE_MILK_POWDER'] = pd.to_numeric(df['WholeMilkPowder_7'], errors='coerce')
-    new_df['VOSKIMMED_MILK_POWDERLUME'] = pd.to_numeric(df['SkimmedMilkPowder_8'], errors='coerce')
+    new_df['SKIMMED_MILK_POWDER'] = pd.to_numeric(df['SkimmedMilkPowder_8'], errors='coerce')
     new_df['CONCENTRATED_MILK'] = pd.to_numeric(df['ConcentratedMilk_9'], errors='coerce')
     new_df['CHEESE'] = pd.to_numeric(df['Cheese_5'], errors='coerce')
     new_df['WHEY_POWDER'] = pd.to_numeric(df['WheyPowder_10'], errors='coerce')
