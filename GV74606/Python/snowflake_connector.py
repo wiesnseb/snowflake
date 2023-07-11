@@ -5,6 +5,29 @@ from api_call import *
 
 
 def write_table(df, snowflake_database, snowflake_schema, snowflake_table, if_exists='replace'):
+    """
+    Writes a pandas DataFrame to a Snowflake table.
+
+    Parameters:
+    - df (pandas.DataFrame): The DataFrame to be written to Snowflake.
+    - snowflake_database (str): The name of the Snowflake database.
+    - snowflake_schema (str): The name of the Snowflake schema.
+    - snowflake_table (str): The name of the Snowflake table.
+    - if_exists (str, optional): Action to take if the table already exists. Possible values are 'fail', 'replace', and 'append'. Default is 'replace'.
+
+    Returns:
+    None
+
+    Raises:
+    - snowflake.connector.errors.DatabaseError: If there is an error connecting to Snowflake or executing the SQL statement.
+
+    Example:
+    >>> df = pd.DataFrame({'column1': [1, 2, 3], 'column2': [10, 20, 30]})
+    >>> snowflake_database = 'my_database'
+    >>> snowflake_schema = 'my_schema'
+    >>> snowflake_table = 'my_table'
+    >>> write_table(df, snowflake_database, snowflake_schema, snowflake_table, if_exists='append')
+    """
     snowflake_account = os.environ.get('SNOWFLAKE_ACCOUNT')
     snowflake_user = os.environ.get('SNOWFLAKE_USER')
     snowflake_password = os.environ.get('SNOWFLAKE_PASSWORD')
@@ -18,6 +41,28 @@ def write_table(df, snowflake_database, snowflake_schema, snowflake_table, if_ex
 
 
 def add_column_comments(snowflake_database, snowflake_schema, column_comments, snowflake_table):
+    """
+    Adds comments to specific columns in a Snowflake table.
+
+    Parameters:
+    - snowflake_database (str): The name of the Snowflake database.
+    - snowflake_schema (str): The name of the Snowflake schema.
+    - column_comments (dict): A dictionary where the keys are column names and the values are the corresponding comments.
+    - snowflake_table (str): The name of the Snowflake table.
+
+    Returns:
+    None
+
+    Raises:
+    - snowflake.connector.errors.DatabaseError: If there is an error connecting to Snowflake or executing the SQL statement.
+
+    Example:
+    >>> snowflake_database = 'my_database'
+    >>> snowflake_schema = 'my_schema'
+    >>> column_comments = {'column1': 'This is the first column.', 'column2': 'This is the second column.'}
+    >>> snowflake_table = 'my_table'
+    >>> add_column_comments(snowflake_database, snowflake_schema, column_comments, snowflake_table)
+    """
     snowflake_account = os.environ.get('SNOWFLAKE_ACCOUNT')
     snowflake_user = os.environ.get('SNOWFLAKE_USER')
     snowflake_password = os.environ.get('SNOWFLAKE_PASSWORD')
@@ -53,6 +98,28 @@ def add_column_comments(snowflake_database, snowflake_schema, column_comments, s
 
 
 def add_table_comment(snowflake_database, snowflake_schema, snowflake_table, table_comment):
+    """
+    Adds a comment to a Snowflake table.
+
+    Parameters:
+    - snowflake_database (str): The name of the Snowflake database.
+    - snowflake_schema (str): The name of the Snowflake schema.
+    - snowflake_table (str): The name of the Snowflake table.
+    - table_comment (str): The comment to be added to the table.
+
+    Returns:
+    None
+
+    Raises:
+    - snowflake.connector.errors.DatabaseError: If there is an error connecting to Snowflake or executing the SQL statement.
+
+    Example:
+    >>> snowflake_database = 'my_database'
+    >>> snowflake_schema = 'my_schema'
+    >>> snowflake_table = 'my_table'
+    >>> table_comment = 'This is a sample table comment.'
+    >>> add_table_comment(snowflake_database, snowflake_schema, snowflake_table, table_comment)
+    """
     snowflake_account = os.environ.get('SNOWFLAKE_ACCOUNT')
     snowflake_user = os.environ.get('SNOWFLAKE_USER')
     snowflake_password = os.environ.get('SNOWFLAKE_PASSWORD')

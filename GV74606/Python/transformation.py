@@ -1,6 +1,15 @@
 import pandas as pd
 
 def transform_renewable_electricity(df):
+    """
+    Transforms a given DataFrame containing data into a new DataFrame with modified columns.
+
+    Parameters:
+    - df (pandas.DataFrame): The input DataFrame containing data.
+
+    Returns:
+    - new_df (pandas.DataFrame): The transformed DataFrame with modified columns.
+    """
     new_df = pd.DataFrame()
 
     new_df['YEAR'] = df['Periods'].str[:4]
@@ -34,6 +43,15 @@ def transform_renewable_electricity(df):
 
 
 def transform_milk_supply_and_dairy_production(df):
+    """
+    Transforms a given DataFrame containing data into a new DataFrame with modified columns.
+
+    Parameters:
+    - df (pandas.DataFrame): The input DataFrame containing data.
+
+    Returns:
+    - new_df (pandas.DataFrame): The transformed DataFrame with modified columns.
+    """
     new_df = pd.DataFrame()
     
     new_df['YEAR'] = df['Periods'].str[:4]
