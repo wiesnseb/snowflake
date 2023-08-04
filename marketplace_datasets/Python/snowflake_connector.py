@@ -1,10 +1,31 @@
 import os
+import configparser
 from snowflake.connector.pandas_tools import pd_writer
 from sqlalchemy import create_engine
 from api_call import *
 
 
-def write_table(df, snowflake_database, snowflake_schema, snowflake_table, if_exists='replace'):
+def get_snowflake_engine(snowflake_database, snowflake_schema):
+    # Read the SnowSQL config file
+    config = configparser.ConfigParser()
+    config.read('/Users/sebastianwiesner/.snowsql/config')
+
+    # Retrieve the connection details
+    snowflake_account = config.get('connections.NIMBUS', 'accountname')
+    snowflake_user = config.get('connections.NIMBUS', 'username')
+    snowflake_password = config.get('connections.NIMBUS', 'password')
+    snowflake_role = config.get('connections.NIMBUS', 'rolename')
+    snowflake_warehouse = config.get('connections.NIMBUS', 'warehousename')
+    snowflake_database = snowflake_database
+    snowflake_schema = snowflake_schema
+
+    conn_string = f"snowflake://{snowflake_user}:{snowflake_password}@{snowflake_account}/{snowflake_database}/{snowflake_schema}?role={snowflake_role}&warehouse={snowflake_warehouse}"
+    engine = create_engine(conn_string)
+
+    return engine
+
+
+def write_table(df, snowflake_table, snowflake_database, snowflake_schema, if_exists='replace'):
     """
     Writes a pandas DataFrame to a Snowflake table.
 
@@ -28,12 +49,8 @@ def write_table(df, snowflake_database, snowflake_schema, snowflake_table, if_ex
     >>> snowflake_table = 'my_table'
     >>> write_table(df, snowflake_database, snowflake_schema, snowflake_table, if_exists='append')
     """
-    snowflake_account = os.environ.get('SNOWFLAKE_ACCOUNT')
-    snowflake_user = os.environ.get('SNOWFLAKE_USER')
-    snowflake_password = os.environ.get('SNOWFLAKE_PASSWORD')
 
-    conn_string = f"snowflake://{snowflake_user}:{snowflake_password}@{snowflake_account}/{snowflake_database}/{snowflake_schema}"
-    engine = create_engine(conn_string)
+    engine = get_snowflake_engine(snowflake_database, snowflake_schema)
 
     #Write the data to Snowflake, using pd_writer to speed up loading
     with engine.connect() as con:
@@ -63,12 +80,8 @@ def add_column_comments(snowflake_database, snowflake_schema, column_comments, s
     >>> snowflake_table = 'my_table'
     >>> add_column_comments(snowflake_database, snowflake_schema, column_comments, snowflake_table)
     """
-    snowflake_account = os.environ.get('SNOWFLAKE_ACCOUNT')
-    snowflake_user = os.environ.get('SNOWFLAKE_USER')
-    snowflake_password = os.environ.get('SNOWFLAKE_PASSWORD')
-
-    conn_string = f"snowflake://{snowflake_user}:{snowflake_password}@{snowflake_account}/{snowflake_database}/{snowflake_schema}"
-    engine = create_engine(conn_string)
+    
+    engine = get_snowflake_engine(snowflake_database, snowflake_schema)
 
     with engine.connect() as con:
         # Retrieve the current table description from Snowflake
@@ -120,12 +133,8 @@ def add_table_comment(snowflake_database, snowflake_schema, snowflake_table, tab
     >>> table_comment = 'This is a sample table comment.'
     >>> add_table_comment(snowflake_database, snowflake_schema, snowflake_table, table_comment)
     """
-    snowflake_account = os.environ.get('SNOWFLAKE_ACCOUNT')
-    snowflake_user = os.environ.get('SNOWFLAKE_USER')
-    snowflake_password = os.environ.get('SNOWFLAKE_PASSWORD')
 
-    conn_string = f"snowflake://{snowflake_user}:{snowflake_password}@{snowflake_account}/{snowflake_database}/{snowflake_schema}"
-    engine = create_engine(conn_string)
+    engine = get_snowflake_engine(snowflake_database, snowflake_schema)
 
     with engine.connect() as con:
         # Alter the table to add the table comment

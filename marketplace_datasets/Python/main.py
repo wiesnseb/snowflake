@@ -6,13 +6,13 @@ from transformation import*
 def main():
     tic = time.perf_counter()
 
-    snowflake_database = 'SEBAS_DB'
+    snowflake_database = 'MARKETPLACE'
     snowflake_schema = 'PUBLIC'
 
     # Dataset renewable electricity
     df_renewable_electricity = get_data_as_dataframe('https://opendata.cbs.nl/ODataApi/odata/82610ENG/TypedDataSet')
     df_renewable_electricity = transform_renewable_electricity(df_renewable_electricity)
-    write_table(df_renewable_electricity, snowflake_database, snowflake_schema, snowflake_table='renewable_electricity')
+    write_table(df=df_renewable_electricity, snowflake_database = snowflake_database, snowflake_schema=snowflake_schema, snowflake_table='renewable_electricity')
     comments_renewable_electricity = {
         'YEAR': 'Year of record.',
         'ENERGY_SOURCES_TECHNIQUES': 'Energy sources / techniques.',
@@ -36,7 +36,7 @@ def main():
     This table contains definite figures until 2020, revised provisional figures of 2021 and 2022."""
     add_table_comment(snowflake_database=snowflake_database, snowflake_schema=snowflake_schema, snowflake_table='renewable_electricity', table_comment=table_comments_renewable_electricity)
 
-    
+
     # Dataset milk supply and dairy production
     df_milk_supply_and_dairy_production = get_data_as_dataframe('https://opendata.cbs.nl/ODataApi/odata/7425eng/TypedDataSet')
     df_milk_supply_and_dairy_production = transform_milk_supply_and_dairy_production(df_milk_supply_and_dairy_production)
@@ -68,7 +68,7 @@ def main():
     The table does not contain figures about fresh products such as drinking milk for consumption or acidified milk products such as yoghurts.
     Figures about these products are only available for the years 1995-1997. Data available from: January 1995"""
     add_table_comment(snowflake_database=snowflake_database, snowflake_schema=snowflake_schema, snowflake_table='milk_supply_and_dairy_production', table_comment=table_comment_milk_supply_and_dairy_production)
-    
+
     toc = time.perf_counter()
     print(f"Executed in {toc - tic:0.4f} seconds")
 
